@@ -5,16 +5,15 @@ from django.test import Client
 from .views import *
 from unittest.mock import patch
 from django.contrib.sessions.middleware import SessionMiddleware
+from selenium.webdriver import Chrome
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 
 class PageTestCase(TestCase):
 
     def test_index_page(self):
         response = self.client.get(reverse('index'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_legalnotice_page(self):
-        response = self.client.get(reverse('store:legalnotice'))
         self.assertEqual(response.status_code, 200)
 
     def test_search_page(self):
@@ -27,13 +26,9 @@ class PageTestCase(TestCase):
 
 class UserTestCase(TestCase):
 
-    def setUp(self):
-        user = User.objects.create(username='Jean', email='jean@gmail.com')
-        user.set_password('Test123')
-        user.save()
-
     def test_signup(self):
-        response = self.client.post(reverse('store:signup'), {'username': 'Jean', 'email': 'testuser@email.com', 'password': 'Test123'})
+        response = self.client.post(reverse('store:signup'), {'username': 'Jean', 'last_name': 'Jean', 'first_name':
+            'Pierre', 'email': 'testuser@email.com', 'password': 'Test123'})
         self.assertEqual(response.status_code, 200)
 
     def test_signin(self):
@@ -121,3 +116,29 @@ class SubstituteTestCase(TestCase):
              'https://fr.openfoodfacts.org/produit/5410063033092/cereal-double-delight',
              'https://static.openfoodfacts.org/images/products/541/006/303/3092/nutrition_fr.15.400.jpg'],})
         self.assertEqual(response.status_code, 302)
+        
+        
+class ProfileModificationTestCase(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='Jean', last_name='Valentin', first_name='Pierre', email='jean@gmail.com', password='Test123')
+
+    def test_profile_modification(self):
+        logged_user = self.client.login(username='Jean', password='Test123')
+        response = self.client.post(reverse('store:update'), {'username': 'Raoof', 'last_name': 'Rachidi', 'first_name': 'Raoof'})
+        self.assertEqual(response.status_code, 302)
+
+
+class SeleniumTestCase(TestCase):
+    def test_selenium_legalnotice_page(self):
+        driver = Chrome()
+        # Navigate to url
+        driver.get("http://127.0.0.1:8000/")
+        # Store 'box A' as source element
+        sourceEle = driver.find_element(By.ID, "apropos")
+
+        # Performs dragAndDropBy onto the target element offset position
+        webdriver.ActionChains(driver).click_and_hold(sourceEle).perform()
+        #Performs release event
+        webdriver.ActionChains(driver).release().perform()
