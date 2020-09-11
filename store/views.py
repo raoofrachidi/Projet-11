@@ -17,23 +17,6 @@ def index(request):
     return render(request, 'store/index.html')
 
 
-def autocomplete(request):
-    """autocomplete ajax"""
-    if request.is_ajax():
-        query_autocomplete = request.GET.get('term', '')
-        products = Product.objects.filter(name__icontains=query_autocomplete).order_by('id')[:10]
-        results = []
-        global data
-        for p in products:
-            product_dict = {}
-            product_dict = p.name
-            results.append(product_dict)
-        data = json.dumps(results)
-    else:
-        data = 'fail'
-    return HttpResponse(data, 'application/json')
-
-
 def signup(request):
     """This view manages the registration of a user"""
     if request.method == 'POST':
@@ -42,12 +25,16 @@ def signup(request):
             email = form.cleaned_data['email']
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            last_name = form.cleaned_data['last_name']
+            first_name = form.cleaned_data['first_name']
 
             user = User.objects.filter(email=email, username=username)
             if not user.exists():
                 user = User(
                     email=email,
                     username=username,
+                    last_name=last_name,
+                    first_name=first_name,
                 )
                 user.set_password(password)
                 user.save()
@@ -94,6 +81,24 @@ def legalnotice(request):
 def myaccount(request):
     """This view displays a user account page"""
     return render(request, 'store/myaccount.html')
+
+
+@login_required
+def update(request):
+    """This view updates the user's profile"""
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        if u_form.is_valid():
+            u_form.save()
+            messages.success(request, 'Votre profil a été mis à jour !')
+            return redirect('store:myaccount')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+
+    context = {
+        'u_form': u_form,
+    }
+    return render(request, 'store/update.html', context)
 
 
 @login_required
