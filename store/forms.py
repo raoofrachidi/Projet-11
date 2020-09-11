@@ -22,10 +22,12 @@ class UserSignUpForm(ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'first_name', 'last_name', 'email', 'password']
         widgets = {
             'username': TextInput(attrs={'class': 'form-control'}),
-            'email': EmailInput(attrs={'class': 'form-control'}),
+            'last_name': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'first_name': TextInput(attrs={'class': 'form-control', 'required': True}),
+            'email': EmailInput(attrs={'class': 'form-control', 'required': True}),
         }
 
     def clean(self):
@@ -35,3 +37,10 @@ class UserSignUpForm(ModelForm):
         username = cleaned_data.get('username')
 
         return cleaned_data
+
+
+class UserUpdateForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['username', 'last_name', 'first_name']
