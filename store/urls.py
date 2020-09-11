@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^signin/', views.signin, name='signin'),
     url(r'^myaccount/', views.myaccount, name='myaccount'),
     url(r'^legalnotice/', views.legalnotice, name='legalnotice'),
+    url(r'^update/', views.update, name='update'),
 ]
