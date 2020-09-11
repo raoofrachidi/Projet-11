@@ -28,8 +28,14 @@
             <hr>
             <br>
             <p>Adresse email : {{ user.email }}</p>
+            <p>Nom de famille : {{ user.last_name }}</p>
+            <p>Prénom : {{ user.first_name }}</p>
         </div>
         <br>
     </div>
 </section>
+<div class="container text-center my-auto">
+    <a href="/store/update/" id="connexion"><button class="btn btn-primary btn-xl mt-50" type="submit" id="createaccount">Modifier mon profil</button></a>
+</div>
+<br>
 {% endblock %}
