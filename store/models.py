@@ -3,12 +3,18 @@ from passlib.hash import pbkdf2_sha256
 from django.contrib.auth.models import User
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(max_length=1000)
     url = models.URLField()
     picture = models.URLField()
     nutriscore = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     picture_nutrition = models.URLField()
 
     def __str__(self):
