@@ -93,7 +93,7 @@ def update(request):
             messages.success(request, 'Votre profil a été mis à jour !')
             return redirect('store:myaccount')
     else:
-        u_form = UserUpdateForm(instance=request.user)
+        pass
 
     context = {
         'u_form': u_form,
