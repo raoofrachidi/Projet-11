@@ -8,7 +8,7 @@ class Product(models.Model):
     url = models.URLField()
     picture = models.URLField()
     nutriscore = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.CharField(max_length=100)
     picture_nutrition = models.URLField()
 
     def __str__(self):
