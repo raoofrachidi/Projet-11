@@ -3,6 +3,14 @@ from passlib.hash import pbkdf2_sha256
 from django.contrib.auth.models import User
 
 
+class Category(models.Model):
+    """Category class"""
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(max_length=1000)
     url = models.URLField()
