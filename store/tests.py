@@ -16,6 +16,10 @@ class PageTestCase(TestCase):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
 
+    def test_legalnotice_page(self):
+        response = self.client.get(reverse('store:legalnotice'))
+        self.assertEqual(response.status_code, 200)
+
     def test_search_page(self):
         """test the search page"""
         response = self.client.get(reverse('store:search'), {
@@ -130,15 +134,4 @@ class ProfileModificationTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
-class SeleniumTestCase(TestCase):
-    def test_selenium_legalnotice_page(self):
-        driver = Chrome()
-        # Navigate to url
-        driver.get("http://127.0.0.1:8000/")
-        # Store 'box A' as source element
-        sourceEle = driver.find_element(By.ID, "apropos")
 
-        # Performs dragAndDropBy onto the target element offset position
-        webdriver.ActionChains(driver).click_and_hold(sourceEle).perform()
-        #Performs release event
-        webdriver.ActionChains(driver).release().perform()
