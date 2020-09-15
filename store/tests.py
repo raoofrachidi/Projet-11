@@ -48,15 +48,16 @@ class UserTestCase(TestCase):
     def test_myaccount(self):
         logged_user = self.client.login(username='Jean', password='Test123')
         response = self.client.get(reverse('store:myaccount'))
-        self.assertEqual(response.status_code , 200)
+        self.assertEqual(response.status_code , 302)
 
     def test_myfavorites(self):
         logged_user = self.client.login(username='Jean', password='Test123')
         response = self.client.get(reverse('store:myfavorites'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 
 class ProductTestCase(TestCase):
+
     def test_detail(self):
         response = self.client.get(reverse('store:detail'), {
             'substitute': ['Céréal double delight', 'fr:Biscuits cacaotés fourrés goût vanille',
@@ -70,7 +71,7 @@ class SubstituteTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='Jean', email='jean@gmail.com', password='Test123')
+            username='Jean', last_name='Valentin', first_name='Pierre', email='jean@gmail.com', password='Test123')
         self.factory = RequestFactory()
         self.selected_product = ['selected_name', 'selected_category', 'selected_img', 'selected_nutriscore', 'selected_url']
 
@@ -121,8 +122,8 @@ class SubstituteTestCase(TestCase):
              'https://fr.openfoodfacts.org/produit/5410063033092/cereal-double-delight',
              'https://static.openfoodfacts.org/images/products/541/006/303/3092/nutrition_fr.15.400.jpg'],})
         self.assertEqual(response.status_code, 302)
-        
-        
+
+
 class ProfileModificationTestCase(TestCase):
 
     def setUp(self):
