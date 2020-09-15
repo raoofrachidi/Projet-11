@@ -7,6 +7,7 @@ from unittest.mock import patch
 from django.contrib.sessions.middleware import SessionMiddleware
 from selenium.webdriver import Chrome
 from selenium import webdriver
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.common.by import By
 
 
@@ -134,4 +135,50 @@ class ProfileModificationTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
-
+class SeleniumTestCase(StaticLiveServerTestCase):
+    def test_selenium_new_functionality(self):
+        driver = Chrome()
+        # Navigate to signup url
+        driver.get('%s%s' % (self.live_server_url, '/store/signup/'))
+        # Fill the signup fields
+        username_input = driver.find_element(By.ID, "id_username")
+        username_input.send_keys('Albert')
+        last_name_input = driver.find_element(By.ID, "id_last_name")
+        last_name_input.send_keys('Jean')
+        first_name_input = driver.find_element(By.ID, "id_first_name")
+        first_name_input.send_keys('Pierre')
+        email_input = driver.find_element(By.ID, "id_email")
+        email_input.send_keys('albert@gmail.com')
+        password_input = driver.find_element(By.ID, "id_password")
+        password_input.send_keys('Albert97.6')
+        confirm_password_input = driver.find_element(By.ID, "id_password_confirm")
+        confirm_password_input.send_keys('Albert97.6')
+        # Store 'box A' as source element
+        signupbutton = driver.find_element(By.ID, "createaccount")
+        # Performs click onto the target element offset position
+        webdriver.ActionChains(driver).click(signupbutton).perform()
+        # Fill the signup fields
+        username_signin_input = driver.find_element(By.ID, "id_username")
+        username_signin_input.send_keys('Albert')
+        password_signin_input = driver.find_element(By.ID, "id_password")
+        password_signin_input.send_keys('Albert97.6')
+        # Store 'box A' as source element
+        signinbutton = driver.find_element(By.ID, "connection")
+        # Performs click onto the target element offset position
+        webdriver.ActionChains(driver).click(signinbutton).perform()
+        # Navigate to update url
+        driver.get('%s%s' % (self.live_server_url, '/store/update/'))
+        # Fill the update fields
+        username_update_input = driver.find_element(By.ID, "id_username")
+        username_update_input.clear()
+        username_update_input.send_keys('Kevin')
+        last_name_update_input = driver.find_element(By.NAME, "last_name")
+        last_name_update_input.clear()
+        last_name_update_input.send_keys('Marie')
+        first_name_update_input = driver.find_element(By.NAME, "first_name")
+        first_name_update_input.clear()
+        first_name_update_input.send_keys('Laurie')
+        # Store 'box A' as source element
+        modifybutton = driver.find_element(By.ID, "connection")
+        # Performs click onto the target element offset position
+        webdriver.ActionChains(driver).click(modifybutton).perform()
